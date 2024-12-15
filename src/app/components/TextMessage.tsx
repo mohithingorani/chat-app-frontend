@@ -11,7 +11,7 @@ export default function TextMessage({ messageObject, myId }: TextMessageProps) {
   const isMyMessage = messageObject.id === myId;
   const textMessage = messageObject.message;
   const time = messageObject.time;
-  
+  const username = messageObject.username;
   
   
   return (
@@ -43,8 +43,9 @@ export default function TextMessage({ messageObject, myId }: TextMessageProps) {
             </div>
           </div>
           <div>
-            <div className="text-xs pt-1 text-slate-300 flex justify-start">
-              {time}
+            <div className="text-xs pt-1 text-slate-300 flex flex-col items-start justify-start">
+              <div className="text-slate-100">{username}</div>
+              <div>{time}</div>
             </div>
           </div>
         </div>
