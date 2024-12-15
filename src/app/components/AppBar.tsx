@@ -3,11 +3,12 @@
 import { signIn, signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
+import Sidebar from "./SideBar";
 export default function AppBar() {
   const session = useSession();
   if (session.status === "loading") {
     return (
-      <div className="flex justify-end gap-4 bg-white rounded-md bg-opacity-55  pr-4 py-6 text-white  backdrop-blur-md text-2xl fixed top-0 left-0 right-0">
+      <div className="flex justify-end gap-4 bg-white rounded-md bg-opacity-55  pr-4 py-6 text-white  backdrop-blur-md text-2xl">
         <div role="status" className="flex justify-center items-center w-full">
           <svg
             aria-hidden="true"
@@ -31,7 +32,7 @@ export default function AppBar() {
     );
   }
   return (
-    <div className="flex justify-end gap-4 bg-white rounded-md bg-opacity-55  pr-4 py-6 text-white  backdrop-blur-md text-2xl fixed top-0 left-0 right-0">
+    <div className="flex justify-end gap-4 bg-white rounded-md bg-opacity-55  pr-4 py-6 text-white  backdrop-blur-md text-2xl ">
       {session.status === "authenticated" ? (
         <div className="flex w-full pl-4 justify-between gap-8 items-center">
           <div className="flex justify-start gap-2 items-center">
@@ -45,7 +46,9 @@ export default function AppBar() {
               />
             </div>
 
-            <div className="text-black px-4">{session.data.user?.name}</div>
+            <div className="text-black px-4 hover:text-blue-800 cursor-pointer">
+              {session.data.user?.name}
+            </div>
           </div>
           <button
             className="hover:text-blue-800 text-black"
@@ -72,9 +75,11 @@ export default function AppBar() {
         </button>
       ) : null}
       {
-        <Link href="/therapist">
-          <button className="hover:text-blue-800 text-black">Therapy</button>
-        </Link>
+        <div className="flex flex-col items-center justify-center">
+          <Link href="/therapist">
+            <button className="hover:text-blue-800 text-black">Therapy</button>
+          </Link>
+        </div>
       }
     </div>
   );

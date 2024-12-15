@@ -3,8 +3,8 @@ import Link from "next/link";
 // Footer.jsx or Footer.js
 export default function Footer() {
     return (
-        <footer className="w-full bg-[#111111] text-white py-4">
-            <div className="container mx-auto text-center text-lg py-4">
+        <footer className="w-full bg-[#111111] bg-opacity-75 text-white py-2 ">
+            <div className="container mx-auto text-center text-lg">
                 © 2024 Mohit Hingorani
             </div>
 

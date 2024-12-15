@@ -41,27 +41,27 @@ export const NEXT_AUTH = {
             return session
         },
         async signIn({ profile }: any) {
-            const client = await getClient();
-            console.log(profile)
-            console.log(client)
-            const userExist = await client.user.findUnique({
-                where: {
-                    email: profile.email
-                }
-            })
-            if (!userExist) {
-                try {
-                    await client.user.create({
-                        data: {
-                            email: profile.email,
-                            name: profile.name,
-                        }
-                    })
-                }
-                catch(err){
-                    console.log("Error creating user",err);
-                }
-            }
+            // const client = await getClient();
+            // console.log(profile)
+            // console.log(client)
+            // const userExist = await client.user.findUnique({
+            //     where: {
+            //         email: profile.email
+            //     }
+            // })
+            // if (!userExist) {
+            //     try {
+            //         await client.user.create({
+            //             data: {
+            //                 email: profile.email,
+            //                 name: profile.name,
+            //             }
+            //         })
+            //     }
+            //     catch(err){
+            //         console.log("Error creating user",err);
+            //     }
+            // }
             return true
         }
     },

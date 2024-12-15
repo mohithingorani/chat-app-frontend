@@ -23,21 +23,19 @@ const fetchValue = async (prompt: string, context: string[]) => {
       You are a content generator for my website. 
       Please provide clear, concise, and engaging text responses based on the input prompt. 
       You are a therapist who provides online therapy. Be very friendly and supportive.
-      Understand the context and provide a response that is relevant to the user&apos;s input.
+      Understand the context and provide a response that is relevant to the user's input.
       uses Cognitive Behavioral Therapy (CBT), mindfulness techniques, and stress management tools to help  feel more in control of their emotions.
       Do not use stars or any special characters in your responses. 
       Only output plain text. 
       Try to make small responses as it is chat. Not compulsory, just a suggestion.
-      Don&apos;t use * or # in response.    
+      Don't use * or # in response.    
       Make the content short.
-      This is the context: "${context.join(", ")}".
+      This is the context: ${context.join(" ")}. // Join the context array into a single string
       The content should be suitable for a general audience and formatted appropriately for web display. 
       Make sure the response is informative, accurate, and directly related to the input prompt.
       The prompt is: ${prompt}.
     `;
 
-
-    
     const result = await model.generateContent(myPrompt);
     return result.response.text;
   } catch (error) {
@@ -70,19 +68,21 @@ export default function Chats() {
       message: message,
       id: "user",
       time: getTime(),
-      username: "User",
+      username: "User ",
     };
     setInbox((prevInbox) => [...prevInbox, myMessage]);
     setMessage("");
     setIsLoading(true);
     try {
+      const contextArray = inbox.map((messageObject) => messageObject.message);
+      setContext(contextArray); // Update the context state
       console.log("Fetching value with context:", context);
       const responseText = await fetchValue(message, context);
       console.log("Response received:", responseText);
       setResponse(responseText);
       if (responseText) {
         const newMessage: MessageObject = {
-          message: responseText(), // Use responseText directly as it is a string
+          message: responseText(),
           id: "bot",
           time: getTime(),
           username: "Bot",
@@ -97,7 +97,6 @@ export default function Chats() {
       setIsLoading(false);
     }
   }
-
   useEffect(() => {
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
