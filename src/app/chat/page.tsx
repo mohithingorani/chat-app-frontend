@@ -52,7 +52,7 @@ export default function Chats() {
   };
 
   useEffect(() => {
-    const socket = io("https://chat-application-backend-d14i.onrender.com");
+    const socket = io(process.env.BACKEND_URL || "ws://localhost:3000");
     socket.on("connect", () => {
       setIsLoading(false);
       console.log("Socket connected");

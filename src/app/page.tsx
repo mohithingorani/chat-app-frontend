@@ -9,11 +9,11 @@ export default function Home() {
   return (
     <div className="flex flex-col h-screen ">
       <AppBar />
-      <div className=" bg-transparent w-full h-full relative">
-        <div className="absolute h-full">
+      <div className=" bg-transparent w-full h-full ">
+        <div className="absolute h-full m-4">
           <Sidebar />
         </div>
-        <div className="relative flex flex-col h-full justify-center items-center ">
+        <div className=" flex flex-col h-full justify-center items-center ">
           <WelcomeCard />
         </div>
       </div>

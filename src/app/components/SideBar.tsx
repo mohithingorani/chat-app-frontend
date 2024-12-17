@@ -1,35 +1,29 @@
 // components/Sidebar.js
 import Link from "next/link";
+import FriendCard from "./FriendCard";
 
 const Sidebar = () => {
   return (
     <div className="flex-col hidden xl:flex ">
-      <div className="h-full  w-64 bg-white text-black flex flex-col">
+      <div className="h-full  w-64 bg-white text-black flex flex-col rounded-xl ">
         {/* Sidebar Header */}
-        <div className="p-4 text-3xl font-bold border-b border-gray-700 top-10">
+        <div className="p-4 text-2xl  border-b border-gray-700 top-10">
           Friends
         </div>
 
         {/* Sidebar Links */}
-        <nav className="flex-1">
-          <ul className="p-4">
-            <li className="mb-4">
-              <Link href="/" className="hover:text-gray-400">
-                Home
-              </Link>
-            </li>                                                                                                                                                                                                                                                                                                                                                                          
-            <li className="mb-4">
-              <Link href="/about" className="hover:text-gray-400">
-                About
-              </Link>
-            </li>
-            <li className="mb-4">
-              <Link href="/contact" className="hover:text-gray-400">
-                Contact
-              </Link>
-            </li>
-          </ul>
-        </nav>
+        <ul className=" max-h-64 overflow-y-scroll">
+          <li className="">
+            <FriendCard />
+          </li>
+          <li className="">
+            <FriendCard />
+          </li>
+          <li className="">
+            <FriendCard />
+          </li>
+          
+        </ul>
 
         {/* Sidebar Footer */}
         <div className="p-4 border-t border-gray-700">

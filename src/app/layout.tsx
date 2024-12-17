@@ -25,7 +25,7 @@ export default function RootLayout({
           backgroundImage: `url(/background2.jpg)`,
           backgroundSize: "cover",
         }}
-        className={`${inter.className} ${poppins_init.className} `}
+        className={`${inter.className} ${poppins_init.className} overflow-y-hidden`}
       >
         <Providers>{children}
         </Providers>
