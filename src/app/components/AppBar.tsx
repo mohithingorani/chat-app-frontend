@@ -8,7 +8,7 @@ export default function AppBar() {
   const session = useSession();
   if (session.status === "loading") {
     return (
-      <div className="flex justify-end gap-4 bg-white rounded-md bg-opacity-55  pr-4 py-6 text-white  backdrop-blur-md text-2xl">
+      <div className="flex justify-end gap-4 bg-white rounded-md bg-opacity-55   text-white  backdrop-blur-md text-2xl">
         <div role="status" className="flex justify-center items-center w-full">
           <svg
             aria-hidden="true"
@@ -31,56 +31,93 @@ export default function AppBar() {
       </div>
     );
   }
-  return (
-    <div className="flex justify-end gap-4 bg-white rounded-md bg-opacity-55  pr-4 py-6 text-white  backdrop-blur-md text-2xl ">
-      {session.status === "authenticated" ? (
-        <div className="flex w-full pl-4 justify-between gap-8 items-center">
-          <div className="flex justify-start gap-2 items-center">
-            <div>
-              <Image
-                className="rounded-full"
-                src={`${session.data.user?.image}`}
-                width="50"
-                height="50"
-                alt="profile image"
-              />
-            </div>
+  // return (
+  //   <div className="flex justify-end gap-4 bg-white rounded-md bg-opacity-55  pr-4 py-6 text-white  backdrop-blur-md text-2xl ">
+  //     {session.status === "authenticated" ? (
+  //       <div className="flex w-full pl-4 justify-between gap-8 items-center">
+  //         <div className="flex justify-start gap-2 items-center">
+  //           <div>
+  //             <Image
+  //               className="rounded-full"
+  //               src={`${session.data.user?.image}`}
+  //               width="50"
+  //               height="50"
+  //               alt="profile image"
+  //             />
+  //           </div>
 
-            <div className="text-black px-4 hover:text-blue-800 cursor-pointer">
-              {session.data.user?.name}
-            </div>
-          </div>
-          <button
-            className="hover:text-blue-800 text-black"
-            onClick={() => signOut()}
-          >
-            Logout
-          </button>
+  //           <div className="text-black px-4 hover:text-blue-800 cursor-pointer">
+  //             {session.data.user?.name}
+  //           </div>
+  //         </div>
+  //         <button
+  //           className="hover:text-blue-800 text-black"
+  //           onClick={() => signOut()}
+  //         >
+  //           Logout
+  //         </button>
+  //       </div>
+  //     ) : null}
+  //     {session.status === "unauthenticated" ? (
+  //       <button
+  //         className="hover:text-blue-800  text-black"
+  //         onClick={() => signIn()}
+  //       >
+  //         Login
+  //       </button>
+  //     ) : null}
+  //     {session.status === "unauthenticated" ? (
+  //       <button
+  //         className=" hover:text-blue-800  text-black"
+  //         onClick={() => signIn()}
+  //       >
+  //         Register
+  //       </button>
+  //     ) : null}
+  //     {
+  //       <div className="flex flex-col items-center justify-center">
+  //         <Link href="/therapist">
+  //           <button className="hover:text-blue-800 text-black">Therapy</button>
+  //         </Link>
+  //       </div>
+  //     }
+  //   </div>
+  // );
+  return (
+    <div className="flex bg-transparent justify-between md:justify-center gap-2 md:gap-6 lg:gap-12 items-center p-2 md:p-4 ">
+      <div className="bg-white hidden md:inline-block rounded-full py-4 px-6 text-lg font-semibold border shadow-sm">
+        QuillBox
+      </div>
+      <div className="bg-white rounded-full md:text-sm  lg:text-lg flex items-center justify-center gap-4 md:gap-6  lg:gap-16 py-4 px-6 border shadow-sm ">
+        <Link className="hover:text-orange-600" href="/">Home</Link>
+        <Link className="hover:text-orange-600" href="/">Add Friends</Link>
+        <Link className="hover:text-orange-600 hidden md:inline-block" href="/">Friend Requests</Link>
+        <Link className="hover:text-orange-600 hidden md:inline-block" href="/">Messages</Link>
+      </div>
+        <div className=" bg-white md:flex hidden justify-start items-center gap-2 px-6 py-2 rounded-full border shadow-sm ">
+          <Image
+            src="magnifying-glass.svg"
+            width={24}
+            height={24}
+            alt="search"
+          />
+          <input
+            type="text"
+            className=" px-4 py-2 bg-transparent focus:outline-none"
+            placeholder="Search here"
+          />
         </div>
-      ) : null}
-      {session.status === "unauthenticated" ? (
-        <button
-          className="hover:text-blue-800  text-black"
-          onClick={() => signIn()}
-        >
-          Login
-        </button>
-      ) : null}
-      {session.status === "unauthenticated" ? (
-        <button
-          className=" hover:text-blue-800  text-black"
-          onClick={() => signIn()}
-        >
-          Register
-        </button>
-      ) : null}
-      {
-        <div className="flex flex-col items-center justify-center">
-          <Link href="/therapist">
-            <button className="hover:text-blue-800 text-black">Therapy</button>
-          </Link>
+        <div className="overflow-hidden rounded-full">
+          {session.data ? (
+            <Image
+              className="rounded-full "
+              src={`${session.data.user?.image}`}
+              width="50"
+              height="50"
+              alt="profile image"
+            />
+          ) : null}
         </div>
-      }
-    </div>
+      </div>
   );
 }

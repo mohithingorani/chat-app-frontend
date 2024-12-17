@@ -21,14 +21,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        style={{
-          backgroundImage: `url(/background2.jpg)`,
-          backgroundSize: "cover",
-        }}
-        className={`${inter.className} ${poppins_init.className} overflow-y-hidden`}
+        className={`${inter.className} ${poppins_init.className}  bg-[#F5F5F5]`}
       >
-        <Providers>{children}
-        </Providers>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

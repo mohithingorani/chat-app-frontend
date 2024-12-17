@@ -1,10 +1,11 @@
 "use client";
 import { useSession } from "next-auth/react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export function WelcomeCard() {
-  const [name, setName] = useState<string>("");
+  const [name, setName] = useState<string>("User");
   const [room, setRoom] = useState<string>("");
   const session = useSession();
   const router = useRouter();
@@ -14,47 +15,40 @@ export function WelcomeCard() {
     }
   }
   return (
-    <div className="bg-white max-w-xl   rounded-lg shadow-lg p-8  text-center    ">
-      <div className="text-4xl font-bold">
+    <div className="bg-white border h-full  w-full flex flex-col justify-center items-center  rounded-[25px] shadow-md  p-4  text-center    ">
+      <div className="text-4xl font-semibold">
+        <div>Have a Good day,</div>
+
         <div>
           {session.status === "authenticated" ? (
-            <div>Hey ! {session.data?.user?.name?.split(" ")[0]} 👋</div>
+            <div>{session.data?.user?.name?.split(" ")[0]} 👋</div>
           ) : (
-            <div>Hey ! 👋</div>
+            <div>👋</div>
           )}
         </div>
-        <div>Welcome to my app!</div>
       </div>
 
-      <div className="pt-2 px-4">
+      <div className="py-4 px-4">
         Lets start by joining a room quickly and youll be able to chat in
         realtime
       </div>
-      <div className="flex flex-col justify-normal px-8 gap-4 mt-4">
-        <input
-          type="text"
-          onChange={(e) => setName(e.target.value)}
-          id="name"
-          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
-          placeholder="Username"
-          required
-        />
-
-        <input
-          type="text"
-          onChange={(e) => setRoom(e.target.value)}
-          id="room"
-          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
-          placeholder="Room Number"
-          required
-        />
-        <button
-          onClick={buttonHandler}
-          className="text-black  max-w-md  sm:mx-32 hover:scale-95 bg-green-400 px-3 py-1.5 rounded-xl border border-gray-300 active:scale-95"
-        >
-          Enter room
-        </button>
+      
+        <div className="flex justify-center items-center gap-4">
+          <input
+            type="text"
+            onChange={(e) => setRoom(e.target.value)}
+            id="room"
+            className="bg-gray-50 border max-w-[60%] border-gray-300 text-gray-900 text-sm rounded-[12px] focus:ring-blue-500 focus:border-blue-500 block w-full py-2 px-4 "
+            placeholder="Room Number"
+            required
+          />
+          <button
+            onClick={buttonHandler}
+            className="text-black bg-green-400 px-3 py-1.5 rounded-xl border border-gray-300 active:scale-95"
+          >
+            <Image src="/right-arrow.svg" width="20" height="20" alt="arrow" />
+          </button>
+        </div>
       </div>
-    </div>
   );
 }
