@@ -84,40 +84,60 @@ export default function AppBar() {
   //   </div>
   // );
   return (
-    <div className="flex bg-transparent justify-between md:justify-center gap-2 md:gap-6 lg:gap-12 items-center p-2 md:p-4 ">
+    <div className="flex bg-transparent justify-between md:justify-center gap-2 md:gap-6 lg:gap-12 items-center px-4 pt-4 md:p-4 ">
       <div className="bg-white hidden md:inline-block rounded-full py-4 px-6 text-lg font-semibold border shadow-sm">
         QuillBox
       </div>
       <div className="bg-white rounded-full md:text-sm  lg:text-lg flex items-center justify-center gap-4 md:gap-6  lg:gap-16 py-4 px-6 border shadow-sm ">
-        <Link className="hover:text-orange-600" href="/">Home</Link>
-        <Link className="hover:text-orange-600" href="/">Add Friends</Link>
-        <Link className="hover:text-orange-600 hidden md:inline-block" href="/">Friend Requests</Link>
-        <Link className="hover:text-orange-600 hidden md:inline-block" href="/">Messages</Link>
+        <Link className="hover:text-orange-600" href="/">
+          Home
+        </Link>
+        <Link className="hover:text-orange-600" href="/">
+          Add Friends
+        </Link>
+        <Link className="hover:text-orange-600 hidden md:inline-block" href="/">
+          Friend Requests
+        </Link>
+        <Link className="hover:text-orange-600 hidden md:inline-block" href="/">
+          Messages
+        </Link>
+        {session.status === "unauthenticated" ? (
+          <button
+            className=" hover:text-orange-600"
+            onClick={() => signIn()}
+          >
+            Register
+          </button>
+        ) : null}
+       
+        {session.status === "unauthenticated" ? (
+          <button
+            className="hover:text-orange-600"
+            onClick={() => signIn()}
+          >
+            Login
+          </button>
+        ) : null}
       </div>
-        <div className=" bg-white md:flex hidden justify-start items-center gap-2 px-6 py-2 rounded-full border shadow-sm ">
+      <div className=" bg-white md:flex hidden justify-start items-center gap-2 px-6 py-2 rounded-full border shadow-sm ">
+        <Image src="magnifying-glass.svg" width={24} height={24} alt="search" />
+        <input
+          type="text"
+          className=" px-4 py-2 bg-transparent focus:outline-none"
+          placeholder="Search here"
+        />
+      </div>
+      <div className="overflow-hidden rounded-full">
+        {session.data ? (
           <Image
-            src="magnifying-glass.svg"
-            width={24}
-            height={24}
-            alt="search"
+            className="rounded-full "
+            src={`${session.data.user?.image}`}
+            width="50"
+            height="50"
+            alt="profile image"
           />
-          <input
-            type="text"
-            className=" px-4 py-2 bg-transparent focus:outline-none"
-            placeholder="Search here"
-          />
-        </div>
-        <div className="overflow-hidden rounded-full">
-          {session.data ? (
-            <Image
-              className="rounded-full "
-              src={`${session.data.user?.image}`}
-              width="50"
-              height="50"
-              alt="profile image"
-            />
-          ) : null}
-        </div>
+        ) : null}
       </div>
+    </div>
   );
 }

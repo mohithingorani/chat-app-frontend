@@ -28,8 +28,10 @@ import ImageComponent from "./components/ImageComponent";
 export default function Home() {
   return (
     <div className="flex flex-col min-h-screen">
-      <AppBar />
-      <div className="flex-grow grid grid-cols-1 md:grid-cols-3 py-2 md:py-6 md:px-16 lg:px-16 xl:px-32 2xl:px-80">
+      <div className="flex justify-center items-center">
+        <AppBar />
+      </div>
+      <div className="flex-grow grid grid-cols-1 md:grid-cols-3 py-2 md:py-6 md:px-8 lg:px-16 xl:px-32 2xl:px-80">
         <div className="col-span-2 p-2 hidden md:inline-block">
           <div className="h-full w-full border shadow-md rounded-[30px] bg-white ">
             <ImageComponent />
