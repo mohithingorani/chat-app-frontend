@@ -2,34 +2,44 @@
 
 import "./globals.css";
 import AppBar from "./components/AppBar";
-import Footer from "./components/Footer";
 import { WelcomeCard } from "./components/WelcomCard";
 import Sidebar from "./components/SideBar";
-import Image from "next/image";
 import ImageComponent from "./components/ImageComponent";
-// export default function Home() {
-//   return (
-//     <div className="flex flex-col h-screen ">
-//       <AppBar />
-//       <div className=" bg-transparent w-full h-full ">
-//         <div className="absolute h-full m-4">
-//           <Sidebar />
-//         </div>
-//         <div className=" flex flex-col h-full justify-center items-center ">
-//           <WelcomeCard />
-//         </div>
-//       </div>
-//       <div className="fixed right-0 left-0 bottom-0"></div>
-//       <Footer />
-//     </div>
-//   );
-// }
+import { useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
+import axios from "axios";
+
+export interface userData {
+  email: string;
+  name: string;
+  picture: string;
+  username: string;
+  id: number;
+  createdAt: Date;
+  updatedAt: Date;
+}
 
 export default function Home() {
+  const [userData, setUserData] = useState<userData | null>(null);
+
+  const session = useSession();
+  useEffect(() => {
+    const getInfo = async () => {
+      console.log("Searching for user Data");
+      if (!session.data?.user?.email) return;
+      const userData = await axios.get(
+        `http://localhost:3000/user/details?email=${session.data.user.email}`
+      );
+      setUserData(userData.data);
+    };
+    getInfo();
+  }, [session]);
+
   return (
     <div className="flex flex-col min-h-screen">
+
       <div className="flex justify-center items-center">
-        <AppBar />
+        <AppBar userName={userData?.username} />
       </div>
       <div className="flex-grow grid grid-cols-1 md:grid-cols-3 py-2 md:py-6 md:px-8 lg:px-16 xl:px-32 2xl:px-80">
         <div className="col-span-2 p-2 hidden md:inline-block">

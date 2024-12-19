@@ -4,7 +4,14 @@ import { signIn, signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import Sidebar from "./SideBar";
-export default function AppBar() {
+import { useEffect, useState } from "react";
+import axios from "axios";
+
+
+
+export default function AppBar({userName}: {userName: string | undefined}) {
+
+
   const session = useSession();
   if (session.status === "loading") {
     return (
@@ -31,63 +38,12 @@ export default function AppBar() {
       </div>
     );
   }
-  // return (
-  //   <div className="flex justify-end gap-4 bg-white rounded-md bg-opacity-55  pr-4 py-6 text-white  backdrop-blur-md text-2xl ">
-  //     {session.status === "authenticated" ? (
-  //       <div className="flex w-full pl-4 justify-between gap-8 items-center">
-  //         <div className="flex justify-start gap-2 items-center">
-  //           <div>
-  //             <Image
-  //               className="rounded-full"
-  //               src={`${session.data.user?.image}`}
-  //               width="50"
-  //               height="50"
-  //               alt="profile image"
-  //             />
-  //           </div>
 
-  //           <div className="text-black px-4 hover:text-blue-800 cursor-pointer">
-  //             {session.data.user?.name}
-  //           </div>
-  //         </div>
-  //         <button
-  //           className="hover:text-blue-800 text-black"
-  //           onClick={() => signOut()}
-  //         >
-  //           Logout
-  //         </button>
-  //       </div>
-  //     ) : null}
-  //     {session.status === "unauthenticated" ? (
-  //       <button
-  //         className="hover:text-blue-800  text-black"
-  //         onClick={() => signIn()}
-  //       >
-  //         Login
-  //       </button>
-  //     ) : null}
-  //     {session.status === "unauthenticated" ? (
-  //       <button
-  //         className=" hover:text-blue-800  text-black"
-  //         onClick={() => signIn()}
-  //       >
-  //         Register
-  //       </button>
-  //     ) : null}
-  //     {
-  //       <div className="flex flex-col items-center justify-center">
-  //         <Link href="/therapist">
-  //           <button className="hover:text-blue-800 text-black">Therapy</button>
-  //         </Link>
-  //       </div>
-  //     }
-  //   </div>
-  // );
   return (
     <div className="flex bg-transparent justify-between md:justify-center gap-2 md:gap-6 lg:gap-12 items-center px-4 pt-4 md:p-4 ">
-      <div className="bg-white hidden md:inline-block rounded-full py-4 px-6 text-lg font-semibold border shadow-sm">
+      {/* <div className="bg-white hidden md:inline-block rounded-full py-4 px-6 text-lg font-semibold border shadow-sm">
         QuillBox
-      </div>
+      </div> */}
       <div className="bg-white rounded-full md:text-sm  lg:text-lg flex items-center justify-center gap-4 md:gap-6  lg:gap-16 py-4 px-6 border shadow-sm ">
         <Link className="hover:text-orange-600" href="/">
           Home
@@ -102,21 +58,20 @@ export default function AppBar() {
           Messages
         </Link>
         {session.status === "unauthenticated" ? (
-          <button
-            className=" hover:text-orange-600"
-            onClick={() => signIn()}
-          >
+          <Link href={"/signin"} className=" hover:text-orange-600">
             Register
+          </Link>
+        ) : null}
+        {session.status === "authenticated" ? (
+          <button className=" hover:text-orange-600" onClick={() => signOut()}>
+            Sign Out
           </button>
         ) : null}
-       
+
         {session.status === "unauthenticated" ? (
-          <button
-            className="hover:text-orange-600"
-            onClick={() => signIn()}
-          >
+          <Link href={"/signin"} className="hover:text-orange-600">
             Login
-          </button>
+          </Link>
         ) : null}
       </div>
       <div className=" bg-white md:flex hidden justify-start items-center gap-2 px-6 py-2 rounded-full border shadow-sm ">
@@ -127,8 +82,8 @@ export default function AppBar() {
           placeholder="Search here"
         />
       </div>
-      <div className="overflow-hidden rounded-full">
-        {session.data ? (
+      {session.data ? (
+        <div className="overflow-hidden rounded-full group ">
           <Image
             className="rounded-full "
             src={`${session.data.user?.image}`}
@@ -136,8 +91,11 @@ export default function AppBar() {
             height="50"
             alt="profile image"
           />
-        ) : null}
-      </div>
+          <div className=" absolute opacity-0 group-hover:opacity-100 ">
+            {userName}
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }
