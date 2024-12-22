@@ -48,9 +48,7 @@ export default function TextMessage({ messageObject, myId }: TextMessageProps) {
               <div>{time}</div>
             </div>
             <div>
-              <div className="text-xs pt-1 text-slate-100 flex justify-start">
-                {messageObject.username}
-              </div>
+              
             </div>
           </div>
         </div>

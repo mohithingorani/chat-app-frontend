@@ -3,14 +3,22 @@
 import { signIn, signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
-import Sidebar from "./SideBar";
 import { useEffect, useState } from "react";
+import FriendCard from "./FriendCard";
+import FriendSearchCard from "./FriendSearchCard";
 import axios from "axios";
+import AddFriendCard from "./AddFriends";
+import RecivedRequestsCard from "./RecievedRequests";
+import { useRecoilState } from "recoil";
+import { userNameAtom } from "../atoms";
 
-
-
-export default function AppBar({userName}: {userName: string | undefined}) {
-
+export default function AppBar({ userName }: { userName: string }) {
+  const [users, setUsers] = useState([]);
+  const [showAddFriend, setShowAddFriend] = useState<boolean>(false);
+  const [showRequests, setShowRequests] = useState<boolean>(false);
+  const [searchFriend, setSearchFriend] = useState<string>("");
+  const [recienvedRequests, setRecievedRequests] = useState([]);
+  const [userNameValue, setUserNameValue] = useRecoilState(userNameAtom);
 
   const session = useSession();
   if (session.status === "loading") {
@@ -38,6 +46,37 @@ export default function AppBar({userName}: {userName: string | undefined}) {
       </div>
     );
   }
+  useEffect(() => {
+    const usersList = async () => {
+      const res = await axios.get(
+        `http://localhost:3000/users/search?username=${searchFriend}?selfUsername=${userName}`
+      );
+      const data = await res.data;
+      console.log("Got data");
+      setUsers(data);
+      console.log(data);
+    };
+    setTimeout(() => {
+      if (searchFriend.length > 0) {
+        usersList();
+      }
+    }, 1500);
+  }, [searchFriend]);
+
+  async function getRequests(userName: string) {
+    console.log("userName is" + userName);
+    const res = await axios.get(
+      `http://localhost:3000/friend/requests?username=${userName}`
+    );
+    setRecievedRequests(res.data.requests);
+    console.log(recienvedRequests);
+  }
+
+  useEffect(() => {
+    if (userName) {
+      getRequests(userName);
+    }
+  }, [userName]);
 
   return (
     <div className="flex bg-transparent justify-between md:justify-center gap-2 md:gap-6 lg:gap-12 items-center px-4 pt-4 md:p-4 ">
@@ -48,12 +87,42 @@ export default function AppBar({userName}: {userName: string | undefined}) {
         <Link className="hover:text-orange-600" href="/">
           Home
         </Link>
-        <Link className="hover:text-orange-600" href="/">
-          Add Friends
-        </Link>
-        <Link className="hover:text-orange-600 hidden md:inline-block" href="/">
-          Friend Requests
-        </Link>
+        <div className="group">
+          <Link
+            onClick={() => {
+              setShowAddFriend(!showAddFriend);
+              setShowRequests(false);
+            }}
+            className="hover:text-orange-600 "
+            href="/"
+          >
+            Add Friends
+          </Link>
+          <AddFriendCard
+            visible={showAddFriend}
+            searchFriend={searchFriend}
+            userName={userName || ""}
+            onChange={(e) => setSearchFriend(e.target.value)}
+            users={users}
+          />
+        </div>
+        <div className="group">
+          <Link
+            onClick={() => {
+              setShowRequests(!showRequests);
+              setShowAddFriend(false);
+            }}
+            className="hover:text-orange-600 hidden md:inline-block"
+            href="/"
+          >
+            Friend Requests
+          </Link>
+          <RecivedRequestsCard
+            visible={showRequests}
+            recievedRequests={recienvedRequests}
+          />
+        </div>
+
         <Link className="hover:text-orange-600 hidden md:inline-block" href="/">
           Messages
         </Link>

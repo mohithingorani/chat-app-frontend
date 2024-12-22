@@ -7,7 +7,9 @@ export default function ImageComponent() {
           backgroundSize: "cover",
         }}
         className="h-full p-4 rounded-[25px] "
-      ></div>
+      >
+        
+      </div>
     </div>
   );
 }

@@ -1,10 +1,11 @@
+"use client"
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { Poppins } from "next/font/google";
 import { Providers } from "./providers";
 import { Analytics } from "@vercel/analytics/react";
 import Footer from "./components/Footer";
-
+import { RecoilRoot } from "recoil";
 const inter = Inter({ subsets: ["latin"] });
 
 const poppins_init = Poppins({
@@ -19,12 +20,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${inter.className} ${poppins_init.className}  bg-[#F5F5F5]`}
-      >
-        <Providers>{children}</Providers>
-      </body>
-    </html>
+    <RecoilRoot>
+      <html lang="en">
+        <body
+          className={`${inter.className} ${poppins_init.className}  bg-[#F5F5F5]`}
+        >
+          <Providers>{children}</Providers>
+        </body>
+      </html>
+    </RecoilRoot>
   );
 }
