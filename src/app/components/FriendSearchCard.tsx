@@ -16,13 +16,17 @@ export default function FriendSearchCard({
   async function addFriend(friend: string) {
     console.log("Friend Added");
     try{
-      const friendAdd = await axios.post("http://localhost:3000/friend/request", {
+      const friendAdd = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/friend/request`, {
         fromUserName: userNameValue,
         toUserName: friend,
       });
       console.log(friendAdd.data);
       if(friendAdd.data.status === 200){
         console.log("Friend Request Sent");
+      }
+      if(friendAdd.data.status === 400){
+        console.log("Friend Request Already Sent");
+        alert("Friend Request Already Sent");
       }
       return friendAdd;
     }catch(err){

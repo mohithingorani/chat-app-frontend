@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import axios from "axios";
 import { useRecoilState } from "recoil";
-import { userNameAtom } from "./atoms";
+import { userDataAtom, userNameAtom } from "./atoms";
 
 export interface userData {
   email: string;
@@ -23,8 +23,9 @@ export interface userData {
 
 export default function Home() {
   const [userData, setUserData] = useState<userData | null>(null);
+  const [userDataValue, setUserDataValue] = useRecoilState(userDataAtom);
   const [userNameValue, setUserNameValue] = useRecoilState(userNameAtom);
-
+  
   const session = useSession();
   useEffect(() => {
     const getInfo = async () => {
@@ -32,10 +33,11 @@ export default function Home() {
         console.log("Searching for user Data");
         if (session.data?.user?.email) {
           const { data } = await axios.get(
-            `http://localhost:3000/user/details?email=${session.data.user.email}`
+            `${process.env.NEXT_PUBLIC_BACKEND_URL}/user/details?email=${session.data.user.email}`
           );
           console.log("API response:", data);
           setUserData(data);
+          setUserDataValue(data);
           if (data?.username) {
             setUserNameValue(data.username);
           } else {
@@ -54,12 +56,10 @@ export default function Home() {
   }
   return (
     <div className="flex flex-col min-h-screen">
-      {JSON.stringify(session.data?.user?.email)}
-      {JSON.stringify(userNameValue)}
       <div className="flex justify-center items-center">
         <AppBar userName={userNameValue} />
       </div>
-      <div className="flex-grow grid grid-cols-1 md:grid-cols-3 py-2 md:py-6 md:px-8 lg:px-16 xl:px-32 2xl:px-80">
+      <div className="flex-grow grid grid-cols-1 md:grid-cols-3 py-2 md:py-6 md:px-8 lg:px-16 xl:px-32 2xl:px-40">
         <div className="col-span-2 p-2 hidden md:inline-block">
           <div className="h-full w-full border shadow-md rounded-[30px] bg-white ">
             <ImageComponent />
@@ -68,7 +68,7 @@ export default function Home() {
         <div className="col-span-1 p-2  ">
           <div className="h-full w-full md:border md:shadow-md rounded-[30px] bg-transparent md:bg-white flex flex-col justify-evenly gap-6  items-center p-6">
             <WelcomeCard />
-            <Sidebar />
+            <Sidebar userId={userData?.id || 0} />
           </div>
         </div>
       </div>

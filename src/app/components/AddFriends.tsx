@@ -34,10 +34,10 @@ export default function AddFriendCard({
         </div>
         <div className="flex flex-col">
           {searchFriend.length > 0
-            ? users.map((user: any) => {
+            ? users.map((user: any,key:any) => {
                 return (
                   <FriendSearchCard
-                    key={user.id}
+                    key={key}
                     name={user.username}
                     image={user.picture}
                     myUserName={userName || ""}

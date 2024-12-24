@@ -19,6 +19,7 @@ export default function AppBar({ userName }: { userName: string }) {
   const [searchFriend, setSearchFriend] = useState<string>("");
   const [recienvedRequests, setRecievedRequests] = useState([]);
   const [userNameValue, setUserNameValue] = useRecoilState(userNameAtom);
+  const [debouncedSearch, setDebouncedSearch] = useState<string>("");
 
   const session = useSession();
   if (session.status === "loading") {
@@ -46,36 +47,53 @@ export default function AppBar({ userName }: { userName: string }) {
       </div>
     );
   }
-  useEffect(() => {
-    const usersList = async () => {
-      const res = await axios.get(
-        `http://localhost:3000/users/search?username=${searchFriend}?selfUsername=${userName}`
-      );
+
+  async function getUsersList(searchFriend: string, userName: string) {
+    try {
+      console.log("searchFriend is" + searchFriend);
+      const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/users/search?username=${searchFriend}&selfUsername=${userName}`;
+      console.log(url);
+      const res = await axios.get(url);
+
       const data = await res.data;
       console.log("Got data");
       setUsers(data);
       console.log(data);
+    } catch (err) {
+      console.log("Error getting users", err);
+    }
+  }
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearch(searchFriend);
+    }, 1500); 
+
+    return () => {
+      clearTimeout(handler);
     };
-    setTimeout(() => {
-      if (searchFriend.length > 0) {
-        usersList();
-      }
-    }, 1500);
   }, [searchFriend]);
 
-  async function getRequests(userName: string) {
+  useEffect(() => {
+    if (debouncedSearch) {
+      getUsersList(debouncedSearch, userName);
+    }
+  }, [debouncedSearch]);
+
+  async function getRequests() {
     console.log("userName is" + userName);
     const res = await axios.get(
-      `http://localhost:3000/friend/requests?username=${userName}`
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/friend/requests?username=${userName}`
     );
     setRecievedRequests(res.data.requests);
     console.log(recienvedRequests);
   }
 
   useEffect(() => {
+    const interval = setInterval(() => {
     if (userName) {
-      getRequests(userName);
-    }
+      getRequests();
+    }},5000);
+    return () => clearInterval(interval);
   }, [userName]);
 
   return (
