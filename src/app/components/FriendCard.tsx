@@ -1,8 +1,22 @@
+"use client";
+
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { userDataAtom } from "../atoms";
+import { useRecoilState } from "recoil";
 
 export default function FriendCard({ friend }:{friend:any}) {
+
+  const router = useRouter();
+  const [userDataValue] = useRecoilState(userDataAtom);
+
+  function openChat() {
+    const room = [userDataValue.username, friend.username].sort().join("-");
+    router.push(`/chat/?room=${room}&name=${userDataValue.username}`);
+  }
+
   return (
-    <div className="hover:bg-gray-100 cursor-pointer border border-b-gray-200">
+    <button onClick={openChat} className="hover:bg-gray-100 w-full cursor-pointer border border-b-gray-200">
       <div className="flex p-2">
         {/* Profile Picture */}
         <div className="w-[50px] h-[50px] flex justify-center items-center rounded-full overflow-hidden">
@@ -20,7 +34,7 @@ export default function FriendCard({ friend }:{friend:any}) {
         {/* Friend Details */}
         <div className="flex flex-col justify-between w-full ml-2">
           <div className="flex justify-between items-center">
-            <div className="text-lg font-medium">{friend.name || "Unknown"}</div>
+            <div className="text-lg font-medium">{friend.username || "Unknown"}</div>
             <div className="text-xs text-gray-600">{friend.lastActive || "N/A"}</div>
           </div>
           <div className="flex items-center">
@@ -45,6 +59,6 @@ export default function FriendCard({ friend }:{friend:any}) {
           </div>
         </div>
       </div>
-    </div>
+    </button>
   );
 }

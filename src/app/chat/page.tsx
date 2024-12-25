@@ -29,6 +29,7 @@ export default function Chats() {
   const [usersConnected, setUsersConnected] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const roomNameString = JSON.stringify(roomName);
+  const friendName = roomNameString.slice(1,-1).split("-").filter((user) => user != name)[0];
   const getTime = () => {
     const dateWithouthSecond = new Date();
     const currentTime = dateWithouthSecond.toLocaleTimeString([], {
@@ -50,6 +51,7 @@ export default function Chats() {
       }
     }
   };
+
 
   useEffect(() => {
     const socket = io(process.env.BACKEND_WEBSOCKET_URL || "ws://localhost:3000");
@@ -111,7 +113,7 @@ export default function Chats() {
         }}
       >
         <div className="flex flex-col max-w-2xl w-full h-[90vh] mt-8">
-          <div className=" px-1 text-4xl ml-4">Room : {roomNameString}</div>
+          <div className=" px-1 text-4xl ml-4"> {friendName}</div>
 
           <div className="flex flex-col flex-grow bg-[#0D0D0D] p-8 overflow-y-auto shadow-lg rounded-xl bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-50  mx-4">
             {inbox.map((messageObject, index) => (

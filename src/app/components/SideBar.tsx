@@ -14,7 +14,7 @@ const Sidebar = ({ userId }: { userId: number }) => {
     try {
       console.log("Fetching friends for user id:", userId);
       const response = await axios.get(
-        `http://localhost:3000/user/friends?userId=${userId}`
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/user/friends?userId=${userId}`
       );
       setFriends(response.data.friends || []);
     } catch (error) {
@@ -37,7 +37,7 @@ const Sidebar = ({ userId }: { userId: number }) => {
       <ul className="max-h-64 overflow-y-scroll">
         {friends.map((friend,key) => (
           <li key={key} className="">
-            <FriendCard friend={friend} /> {/* Pass friend as a prop */}
+            <FriendCard friend={friend}    /> {/* Pass friend as a prop */}
           </li>
         ))}
       </ul>
