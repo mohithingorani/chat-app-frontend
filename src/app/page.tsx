@@ -49,7 +49,7 @@ export default function Home() {
       }
     };
     getInfo();
-  }, [session.data?.user?.email, setUserNameValue]);
+  }, [session.data?.user?.email, setUserNameValue,setUserDataValue]);
 
   while (session.data === undefined) {
     return <div>Loading...</div>;

@@ -3,7 +3,7 @@
 import { signIn, signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import FriendCard from "./FriendCard";
 import FriendSearchCard from "./FriendSearchCard";
 import axios from "axios";
@@ -22,9 +22,70 @@ export default function AppBar({ userName }: { userName: string }) {
   const [debouncedSearch, setDebouncedSearch] = useState<string>("");
 
   const session = useSession();
+
+  // Debounce the search input
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearch(searchFriend);
+    }, 1500);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [searchFriend]);
+
+  // Fetch users based on debounced search term
+  const getUsersList = useCallback(async (searchFriend: string) => {
+    try {
+      console.log("searchFriend is", searchFriend);
+      const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/users/search?username=${searchFriend}&selfUsername=${userName}`;
+      const res = await axios.get(url);
+      setUsers(res.data);
+      console.log("Users fetched successfully", res.data);
+    } catch (err) {
+      console.error("Error getting users", err);
+    }
+  }, [userName]);
+
+  useEffect(() => {
+    if (debouncedSearch) {
+      getUsersList(debouncedSearch);
+    }
+  }, [debouncedSearch, getUsersList]);
+
+  // Fetch friend requests
+  const getRequests = useCallback(async () => {
+    try {
+      console.log("Fetching requests for userName:", userName);
+      const res = await axios.get(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/friend/requests?username=${userName}`
+      );
+      setRecievedRequests(res.data.requests);
+    } catch (err) {
+      console.error("Error fetching friend requests", err);
+    }
+  }, [userName]);
+
+  // Fetch friend requests periodically
+  useEffect(() => {
+    const interval = setInterval(() => {
+      getRequests();
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [getRequests]);
+
+  // Fetch requests on userName change
+  useEffect(() => {
+    if (userName) {
+      getRequests();
+    }
+  }, [userName, getRequests]);
+
+  // Conditional rendering based on session status
   if (session.status === "loading") {
     return (
-      <div className="flex justify-end gap-4 bg-white rounded-md bg-opacity-55   text-white  backdrop-blur-md text-2xl">
+      <div className="flex justify-end gap-4 bg-white rounded-md bg-opacity-55 text-white backdrop-blur-md text-2xl">
         <div role="status" className="flex justify-center items-center w-full">
           <svg
             aria-hidden="true"
@@ -47,54 +108,6 @@ export default function AppBar({ userName }: { userName: string }) {
       </div>
     );
   }
-
-  async function getUsersList(searchFriend: string, userName: string) {
-    try {
-      console.log("searchFriend is" + searchFriend);
-      const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/users/search?username=${searchFriend}&selfUsername=${userName}`;
-      console.log(url);
-      const res = await axios.get(url);
-
-      const data = await res.data;
-      console.log("Got data");
-      setUsers(data);
-      console.log(data);
-    } catch (err) {
-      console.log("Error getting users", err);
-    }
-  }
-  useEffect(() => {
-    const handler = setTimeout(() => {
-      setDebouncedSearch(searchFriend);
-    }, 1500); 
-
-    return () => {
-      clearTimeout(handler);
-    };
-  }, [searchFriend]);
-
-  useEffect(() => {
-    if (debouncedSearch) {
-      getUsersList(debouncedSearch, userName);
-    }
-  }, [debouncedSearch]);
-
-  async function getRequests() {
-    console.log("userName is" + userName);
-    const res = await axios.get(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/friend/requests?username=${userName}`
-    );
-    setRecievedRequests(res.data.requests);
-    console.log(recienvedRequests);
-  }
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-    if (userName) {
-      getRequests();
-    }},5000);
-    return () => clearInterval(interval);
-  }, [userName]);
 
   return (
     <div className="flex bg-transparent justify-between md:justify-center gap-2 md:gap-6 lg:gap-12 items-center px-4 pt-4 md:p-4 ">
