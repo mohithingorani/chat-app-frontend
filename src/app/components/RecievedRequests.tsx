@@ -1,6 +1,7 @@
 import Image from "next/image";
 import FriendSearchCard from "./FriendSearchCard";
 import axios from "axios";
+import { useEffect } from "react";
 
 export interface RecivedRequestsCardProps {
   status: string;
@@ -16,6 +17,8 @@ export interface RecivedRequestsCardProps {
   };
 }
 
+
+
 export default function RecivedRequestsCard({
   visible,
   recievedRequests,
@@ -23,6 +26,7 @@ export default function RecivedRequestsCard({
   visible: boolean;
   recievedRequests: RecivedRequestsCardProps[];
 }) {
+  
 
 async function addFriend(fromId: number, toId: number, requestId: number) {
   try {

@@ -35,17 +35,20 @@ export default function AppBar({ userName }: { userName: string }) {
   }, [searchFriend]);
 
   // Fetch users based on debounced search term
-  const getUsersList = useCallback(async (searchFriend: string) => {
-    try {
-      console.log("searchFriend is", searchFriend);
-      const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/users/search?username=${searchFriend}&selfUsername=${userName}`;
-      const res = await axios.get(url);
-      setUsers(res.data);
-      console.log("Users fetched successfully", res.data);
-    } catch (err) {
-      console.error("Error getting users", err);
-    }
-  }, [userName]);
+  const getUsersList = useCallback(
+    async (searchFriend: string) => {
+      try {
+        console.log("searchFriend is", searchFriend);
+        const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/users/search?username=${searchFriend}&selfUsername=${userName}`;
+        const res = await axios.get(url);
+        setUsers(res.data);
+        console.log("Users fetched successfully", res.data);
+      } catch (err) {
+        console.error("Error getting users", err);
+      }
+    },
+    [userName]
+  );
 
   useEffect(() => {
     if (debouncedSearch) {
@@ -138,16 +141,21 @@ export default function AppBar({ userName }: { userName: string }) {
           />
         </div>
         <div className="group">
-          <Link
-            onClick={() => {
-              setShowRequests(!showRequests);
-              setShowAddFriend(false);
-            }}
-            className="hover:text-orange-600 hidden md:inline-block"
-            href="/"
-          >
-            Friend Requests
-          </Link>
+          <div className="relative">
+            <Link
+              onClick={() => {
+                setShowRequests(!showRequests);
+                setShowAddFriend(false);
+              }}
+              className="hover:text-orange-600 hidden md:inline-block"
+              href="/"
+            >
+              Friend Requests
+            </Link>
+            <div className="absolute top-[-1rem] right-[-1rem] bg-red-500 text-white rounded-full px-2 py-1 text-xs font-semibold">
+              {recienvedRequests.filter((request:any) => request.status === "pending").length >0?recienvedRequests.filter((request:any) => request.status === "pending").length:null}
+            </div>
+          </div>
           <RecivedRequestsCard
             visible={showRequests}
             recievedRequests={recienvedRequests}

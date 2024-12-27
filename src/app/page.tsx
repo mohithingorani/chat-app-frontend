@@ -51,7 +51,7 @@ export default function Home() {
     getInfo();
   }, [session.data?.user?.email, setUserNameValue,setUserDataValue]);
 
-  while (session.data === undefined) {
+  if (session.data === undefined) {
     return <div>Loading...</div>;
   }
   return (

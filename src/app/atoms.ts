@@ -18,3 +18,8 @@ export const userDataAtom = atom({
     updatedAt: "",
   },
 });
+
+export const pendingRequestsAtom = atom({
+  key: 'pendingRequests',
+  default: 0,
+});
