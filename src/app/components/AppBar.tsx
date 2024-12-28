@@ -121,7 +121,7 @@ export default function AppBar({ userName }: { userName: string }) {
         <Link className="hover:text-orange-600" href="/">
           Home
         </Link>
-        <div className="group">
+        <div className="group text-center">
           <Link
             onClick={() => {
               setShowAddFriend(!showAddFriend);
@@ -140,21 +140,29 @@ export default function AppBar({ userName }: { userName: string }) {
             users={users}
           />
         </div>
-        <div className="group">
-          <div className="relative">
+        <div  className="group ">
+          <div className="relative text-center">
             <Link
               onClick={() => {
                 setShowRequests(!showRequests);
                 setShowAddFriend(false);
               }}
-              className="hover:text-orange-600 hidden md:inline-block"
+              className="hover:text-orange-600 "
               href="/"
             >
               Friend Requests
             </Link>
-            <div className="absolute top-[-1rem] right-[-1rem] bg-red-500 text-white rounded-full px-2 py-1 text-xs font-semibold">
-              {recienvedRequests.filter((request:any) => request.status === "pending").length >0?recienvedRequests.filter((request:any) => request.status === "pending").length:null}
-            </div>
+            {recienvedRequests.filter(
+              (request: any) => request.status === "pending"
+            ).length > 0 && (
+              <div className="absolute top-[-1rem] right-[-1rem] bg-red-500 text-white rounded-full px-2 py-1 text-xs font-semibold">
+                {
+                  recienvedRequests.filter(
+                    (request: any) => request.status === "pending"
+                  ).length
+                }
+              </div>
+            )}
           </div>
           <RecivedRequestsCard
             visible={showRequests}
