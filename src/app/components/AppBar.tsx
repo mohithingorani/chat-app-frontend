@@ -12,7 +12,7 @@ import RecivedRequestsCard from "./RecievedRequests";
 import { useRecoilState } from "recoil";
 import { userNameAtom } from "../atoms";
 
-export default function AppBar({ userName }: { userName: string }) {
+export default function NavBar({ userName }: { userName: string }) {
   const [users, setUsers] = useState([]);
   const [showAddFriend, setShowAddFriend] = useState<boolean>(false);
   const [showRequests, setShowRequests] = useState<boolean>(false);
@@ -121,7 +121,7 @@ export default function AppBar({ userName }: { userName: string }) {
         <Link className="hover:text-orange-600" href="/">
           Home
         </Link>
-        <div className="group text-center">
+        <div className="text-center">
           <Link
             onClick={() => {
               setShowAddFriend(!showAddFriend);

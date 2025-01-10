@@ -1,18 +1,25 @@
-import { MessageObject } from "../chat/page";
 
 interface TextMessageProps {
   messageObject: MessageObject;
-  myId: string | undefined;
+  myUserName: string;
 }
 
-export default function TextMessage({ messageObject, myId }: TextMessageProps) {
+export interface MessageObject{
+  id :number;
+  message: string;
+  time :any;
+  userName: string;
+  roomName:string;
+}
+
+
+export default function TextMessage({ messageObject, myUserName }: TextMessageProps) {
     
   // Checking against the messageObject.username to match the user
-  const isMyMessage = messageObject.id === myId;
+  const isMyMessage = messageObject.userName === myUserName;
+  console.log(myUserName);
   const textMessage = messageObject.message;
   const time = messageObject.time;
-  const username = messageObject.username;
-  
   
   return (
     <div>
@@ -44,7 +51,6 @@ export default function TextMessage({ messageObject, myId }: TextMessageProps) {
           </div>
           <div>
             <div className="text-xs pt-1 text-slate-300 flex flex-col items-start justify-start">
-              {/* <div className="text-slate-100">{username}</div> */}
               <div>{time}</div>
             </div>
             <div>

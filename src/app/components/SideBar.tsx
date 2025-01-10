@@ -34,7 +34,7 @@ const Sidebar = ({ userId }: { userId: number }) => {
       <div className="p-4 text-2xl top-10">Friends</div>
 
       {/* Sidebar Links */}
-      <ul className="max-h-64 overflow-y-scroll">
+      <ul className="relativemax-h-64 overflow-y-scroll">
         {friends.map((friend,key) => (
           <li key={key} className="">
             <FriendCard friend={friend}    /> {/* Pass friend as a prop */}

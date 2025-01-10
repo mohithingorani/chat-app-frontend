@@ -2,29 +2,83 @@
 
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { userDataAtom } from "../atoms";
+import { userDataAtom, userNameAtom } from "../atoms";
 import { useRecoilState } from "recoil";
+import { useEffect, useRef, useState } from "react";
+import axios from "axios";
 
-export default function FriendCard({ friend }:{friend:any}) {
-
+export default function FriendCard({ friend }: { friend: any }) {
   const router = useRouter();
   const [userDataValue] = useRecoilState(userDataAtom);
+  const [hidden, setHidden] = useState(true);
+  const cardRef = useRef<HTMLButtonElement>(null); // Ref to track the component
+  const userName = useRecoilState(userDataAtom);
+
+  function handleRightClick(event: React.MouseEvent) {
+    event.preventDefault();
+    setHidden(false);
+    console.log("Right Clicked");
+  }
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (cardRef.current && !cardRef.current.contains(event.target as Node)) {
+        setHidden(true); // Hide the "Remove Friend" button
+      }
+    }
+
+    // Add event listener for clicks
+    document.addEventListener("mousedown", handleClickOutside);
+
+    // Clean up the event listener
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   function openChat() {
     const room = [userDataValue.username, friend.username].sort().join("-");
     router.push(`/chat/?room=${room}&name=${userDataValue.username}`);
   }
+  const removeFriend = async () => {
+    try {
+      const removeUserFriend = await axios.post(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/friend/remove`,
+        {
+          myUserName: userName,
+          friendUserName: friend.username,
+        }
+      );
+      console.log("sent request for remove friend ");
+      return removeUserFriend;
+    } catch (error) {
+      console.log("Can remove friend", error);
+    }
+  };
 
   return (
-    <button onClick={openChat} className="hover:bg-gray-100 w-full cursor-pointer border border-b-gray-200">
-      <div className="flex p-2">
+    <button
+      ref={cardRef}
+      onContextMenu={handleRightClick}
+      onClick={openChat}
+      className="hover:bg-gray-100 w-full cursor-pointer overflow-hidden relative"
+    >
+      {!hidden && (
+        <button
+          onClick={removeFriend}
+          className="absolute right-0 top-0  bg-red-500 text-white p-1 rounded-bl-lg rounded-tr-lg hover:text-red-600 hover:font-medium hover:border-2 hover:border-red-500  hover:bg-white"
+        >
+          Remove Friend
+        </button>
+      )}
+      <div className="flex items-center p-2">
         {/* Profile Picture */}
         <div className="w-[50px] h-[50px] flex justify-center items-center rounded-full overflow-hidden">
           <Image
             src={friend.picture || "/avatar.png"} // Use friend's picture or fallback avatar
             width={50}
             height={50}
-            alt={`${friend.name}'s profile`}
+            alt={`${friend.username}'s profile`}
             style={{
               borderRadius: "50%",
             }}
@@ -34,8 +88,12 @@ export default function FriendCard({ friend }:{friend:any}) {
         {/* Friend Details */}
         <div className="flex flex-col justify-between w-full ml-2">
           <div className="flex justify-between items-center">
-            <div className="text-lg font-medium">{friend.username || "Unknown"}</div>
-            <div className="text-xs text-gray-600">{friend.lastActive || "N/A"}</div>
+            <div className="text-lg font-medium truncate">
+              {friend.username || "Unknown"}
+            </div>
+            <div className="text-xs text-gray-600">
+              {friend.lastActive || "N/A"}
+            </div>
           </div>
           <div className="flex items-center">
             {/* Online Status */}

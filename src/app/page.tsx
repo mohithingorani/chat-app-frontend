@@ -1,7 +1,7 @@
 "use client";
 
 import "./globals.css";
-import AppBar from "./components/AppBar";
+import NavBar from "./components/AppBar";
 import { WelcomeCard } from "./components/WelcomCard";
 import Sidebar from "./components/SideBar";
 import ImageComponent from "./components/ImageComponent";
@@ -10,6 +10,7 @@ import { useSession } from "next-auth/react";
 import axios from "axios";
 import { useRecoilState } from "recoil";
 import { userDataAtom, userNameAtom } from "./atoms";
+import { useRouter } from "next/navigation";
 
 export interface userData {
   email: string;
@@ -25,8 +26,20 @@ export default function Home() {
   const [userData, setUserData] = useState<userData | null>(null);
   const [userDataValue, setUserDataValue] = useRecoilState(userDataAtom);
   const [userNameValue, setUserNameValue] = useRecoilState(userNameAtom);
-  
+  const router = useRouter();
   const session = useSession();
+
+  useEffect(() => {
+    if (session.status === "loading") {
+    }
+    else if (session.data?.user) {
+      console.log("Session data:", session.data);
+    } else {
+      console.log("No session data found");
+      router.push("/signin");
+    }
+  }, [session]);
+
   useEffect(() => {
     const getInfo = async () => {
       try {
@@ -49,7 +62,7 @@ export default function Home() {
       }
     };
     getInfo();
-  }, [session.data?.user?.email, setUserNameValue,setUserDataValue]);
+  }, [session.data?.user?.email, setUserNameValue, setUserDataValue]);
 
   if (session.data === undefined) {
     return <div>Loading...</div>;
@@ -57,9 +70,9 @@ export default function Home() {
   return (
     <div className="flex flex-col min-h-screen">
       <div className="flex justify-center items-center">
-        <AppBar userName={userNameValue} />
+        <NavBar userName={userNameValue} />
       </div>
-      <div className="flex-grow grid grid-cols-1 md:grid-cols-3 py-2 md:py-6 md:px-8 lg:px-16 xl:px-32 2xl:px-40">
+      <div className="flex-grow grid grid-cols-1 md:grid-cols-3 py-2  md:px-8 lg:px-16 xl:px-32 2xl:px-40">
         <div className="col-span-2 p-2 hidden md:inline-block">
           <div className="h-full w-full border shadow-md rounded-[30px] bg-white ">
             <ImageComponent />
