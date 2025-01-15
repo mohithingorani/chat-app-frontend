@@ -151,7 +151,7 @@ export default function Chats() {
   }, []);
 
   if (error) {
-    return <div className="text-white">Can't Connect.. Retry</div>;
+    return <div className="text-white">Can&apos;t Connect.. Retry</div>;
   }
 
   if (isLoading) {
