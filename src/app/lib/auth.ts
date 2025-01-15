@@ -1,6 +1,5 @@
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
-import getClient from "../../../db/db";
 import axios from "axios";
 
 export const NEXT_AUTH = {
