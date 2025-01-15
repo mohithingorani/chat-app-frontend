@@ -1,9 +1,10 @@
 "use client";
 
+import { welcomeImageBlurDataUrl } from "@/data/base64images";
 import { signIn } from "next-auth/react";
 import Image from "next/image";
 import { useState } from "react";
-
+import LazyLoad from 'react-lazy-load';
 export default function Signin() {
   // const [firstName, setFirstName] = useState("");
   // const [lastName, setLastName] = useState("");
@@ -14,6 +15,7 @@ export default function Signin() {
   const [showPassword, setShowPassword] = useState(false);
   return (
     <div>
+      
       <div
         className="flex flex-col justify-center items-center h-screen bg-slate-300 xl:px-24"
         style={{
@@ -214,13 +216,16 @@ export default function Signin() {
                 </div>
               )}
             </div>
-            <div className="col-span-0 hidden md:inline-block md:col-span-1 h-full">
+            <div className="col-span-0 hidden md:inline-block md:col-span-1 h-full relative overflow-hidden">
+              <Image placeholder="blur" blurDataURL={welcomeImageBlurDataUrl} style={{
+                borderRadius: "35px",
+              }} className="absolute" src={"/welcomeimage2.jpg"} layout="fill" alt="welcome image" />
               <div
-                style={{
-                  backgroundImage: "url(/welcomeimage2.jpg)",
-                  backgroundSize: "cover",
-                }}
-                className=" bg-gray-400  rounded-[35px] h-full pb-20"
+                // style={{
+                //   backgroundImage: "url(/welcomeimage2.jpg)",
+                //   backgroundSize: "cover",
+                // }}
+                className=" bg-transparent relative top  rounded-[35px] h-full pb-20"
               >
                 <div className="pl-10 text-gray-600  text-2xl font-semibold pt-10">
                   <div>connect.</div>
