@@ -22,7 +22,7 @@ export default function ImageComponent() {
               />
             </div>
             <input
-              placeholder="What's on your mind?"
+              placeholder="What&apos;s on your mind?"
               className="flex-grow bg-gray-200 rounded-[10px] mx-4 px-3 py-1.5 outline-none "
             />
             <button className="text-blue-500 border bg-blue-100 font-semibold  rounded-[10px] px-3 py-1.5">
