@@ -10,7 +10,7 @@ export default function ImageComponent() {
         }}
         className="h-full p-4 rounded-[25px] "
       >
-        <div className="bg-white  rounded-[25px] p-4">
+        {/* <div className="bg-white  rounded-[25px] p-4">
           <div className="w-full  flex justify-between rounded-[10px] p-4">
             <div className="rounded-full">
               <Image
@@ -36,7 +36,7 @@ export default function ImageComponent() {
             <div>Hashtag</div>
             <div>Mention </div>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );
