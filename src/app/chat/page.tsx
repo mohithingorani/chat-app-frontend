@@ -3,6 +3,7 @@
 import TextMessage from "@/app/components/TextMessage";
 import axios from "axios";
 import { useSession } from "next-auth/react";
+import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { Socket, io } from "socket.io-client";
@@ -15,11 +16,13 @@ export interface MessageObject {
   roomName: string;
 }
 
+
 export default function Chats() {
   const { data: session } = useSession(); // Use destructured session data
   const searchParams = useSearchParams();
   const roomName = searchParams.get("room") || "";
   const name = searchParams.get("name") || "";
+  
 
   const [socket, setSocket] = useState<Socket | undefined>(undefined);
   const [inbox, setInbox] = useState<MessageObject[]>([]);
@@ -191,6 +194,9 @@ export default function Chats() {
               }
             }}
           />
+          <button className="text-white">
+            <Image src={"/upload.png"} width="50" height="50" alt="upload"/>
+          </button>
           <button
             onClick={handleSendMessage}
             className="bg-green-500 px-4 py-2 rounded-lg"

@@ -171,7 +171,7 @@ export default function NavBar({ userName }: { userName: string }) {
         </div>
 
         <Link className="hover:text-orange-600 hidden md:inline-block" href="/">
-          Messages
+          Posts
         </Link>
         {session.status === "unauthenticated" ? (
           <Link href={"/signin"} className=" hover:text-orange-600">

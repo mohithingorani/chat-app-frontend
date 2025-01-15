@@ -44,7 +44,7 @@ export function WelcomeCard() {
           />
           <button
             onClick={buttonHandler}
-            className="text-black bg-green-400 px-3 py-1.5 rounded-xl border border-gray-300 active:scale-95"
+            className="text-black bg-green-400 hover:bg-green-500 px-3 py-1.5 rounded-xl border border-gray-300 active:scale-95"
           >
             <Image src="/right-arrow.svg" width="20" height="20" alt="arrow" />
           </button>
