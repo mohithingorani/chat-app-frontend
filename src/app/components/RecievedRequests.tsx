@@ -1,7 +1,7 @@
 import Image from "next/image";
 import FriendSearchCard from "./FriendSearchCard";
 import axios from "axios";
-import { useEffect } from "react";
+import { MouseEventHandler, useEffect } from "react";
 
 export interface RecivedRequestsCardProps {
   status: string;
@@ -22,9 +22,13 @@ export interface RecivedRequestsCardProps {
 export default function RecivedRequestsCard({
   visible,
   recievedRequests,
+  onMouseOver,
+  onMouseOut
 }: {
   visible: boolean;
   recievedRequests: RecivedRequestsCardProps[];
+  onMouseOver?: MouseEventHandler<HTMLDivElement> | undefined
+  onMouseOut?: MouseEventHandler<HTMLDivElement> | undefined
 }) {
   
 
@@ -45,7 +49,7 @@ async function addFriend(fromId: number, toId: number, requestId: number) {
 
   return (
     visible && (
-      <div className="absolute  mt-6 bg-white border p-4 rounded-xl shadow-md w-72">
+      <div onMouseOver={onMouseOver} onMouseOut={onMouseOut} className="absolute  mt-6 bg-white border p-4 rounded-xl shadow-md w-72">
         <div>Pending Requests : {recievedRequests.filter((request)=>request.status==="pending").length}</div>
         <div className="flex flex-col">
           {recievedRequests.length > 0

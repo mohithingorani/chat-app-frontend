@@ -56,6 +56,14 @@ export default function NavBar({ userName }: { userName: string }) {
     }
   }, [debouncedSearch, getUsersList]);
 
+
+  const mouseOutAddFriend =()=>{
+    setShowAddFriend(false);
+  }
+  const mouseOutRecievedRequests = ()=>{
+    setShowRequests(false);
+  }
+
   // Fetch friend requests
   const getRequests = useCallback(async () => {
     try {
@@ -114,18 +122,19 @@ export default function NavBar({ userName }: { userName: string }) {
 
   return (
     <div className="flex bg-transparent justify-between md:justify-center gap-2 md:gap-6 lg:gap-12 items-center px-4 pt-4 md:p-4 ">
-      {/* <div className="bg-white hidden md:inline-block rounded-full py-4 px-6 text-lg font-semibold border shadow-sm">
-        QuillBox
-      </div> */}
       <div className="bg-white rounded-full md:text-sm  lg:text-lg flex items-center justify-center gap-4 md:gap-6  lg:gap-16 py-4 px-6 border shadow-sm ">
         <Link className="hover:text-orange-600" href="/">
           Home
         </Link>
         <div className="text-center">
           <Link
-            onClick={() => {
+            onMouseOver={() => {
               setShowAddFriend(!showAddFriend);
               setShowRequests(false);
+            }}
+            onMouseOut={()=>{
+              if(!showAddFriend)
+              setTimeout(mouseOutAddFriend,1000);
             }}
             className="hover:text-orange-600 "
             href="/"
@@ -133,6 +142,8 @@ export default function NavBar({ userName }: { userName: string }) {
             Add Friends
           </Link>
           <AddFriendCard
+            onMouseOver={() => setShowAddFriend(true)}
+            onMouseLeave={() => setShowAddFriend(false)}
             visible={showAddFriend}
             searchFriend={searchFriend}
             userName={userName || ""}
@@ -140,12 +151,17 @@ export default function NavBar({ userName }: { userName: string }) {
             users={users}
           />
         </div>
-        <div  className="group ">
+        <div className="group ">
           <div className="relative text-center">
             <Link
-              onClick={() => {
-                setShowRequests(!showRequests);
+              onMouseOver={() => {
+                setShowRequests(true);
                 setShowAddFriend(false);
+              }}
+              onMouseOut={()=>{
+                if(!showRequests)
+
+                setTimeout(mouseOutRecievedRequests,1000);
               }}
               className="hover:text-orange-600 "
               href="/"
@@ -165,6 +181,12 @@ export default function NavBar({ userName }: { userName: string }) {
             )}
           </div>
           <RecivedRequestsCard
+            onMouseOver={() => {
+              setShowRequests(true);
+            }}
+            onMouseOut={()=>{
+              setShowRequests(false);
+            }}
             visible={showRequests}
             recievedRequests={recienvedRequests}
           />
