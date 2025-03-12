@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import axios from "axios";
 import { useRecoilState } from "recoil";
-import { userDataAtom, userNameAtom } from "./atoms";
+import { isOnlineAtom, userDataAtom, userNameAtom } from "./atoms";
 import { useRouter } from "next/navigation";
 
 export interface userData {
@@ -26,13 +26,38 @@ export default function Home() {
   const [userData, setUserData] = useState<userData | null>(null);
   const [userDataValue, setUserDataValue] = useRecoilState(userDataAtom);
   const [userNameValue, setUserNameValue] = useRecoilState(userNameAtom);
+  const [isOnline, setIsOnline] = useRecoilState(isOnlineAtom);
   const router = useRouter();
   const session = useSession();
 
   useEffect(() => {
+    const updateLastActive = async () => {
+      try {
+        const {data} = await axios.post(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/onlinestatus`,
+          {
+            email: userData?.email,
+          }
+        );
+        console.log("Sent last active ping")
+
+        return data;
+      } catch (err) {
+        console.log("Error updating last active");
+        console.log(err);
+      }
+    };
+    updateLastActive();
+    const interval = setInterval(() => {
+      updateLastActive();
+    }, 2500);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
     if (session.status === "loading") {
-    }
-    else if (session.data?.user) {
+    } else if (session.data?.user) {
       console.log("Session data:", session.data);
     } else {
       console.log("No session data found");
@@ -68,11 +93,11 @@ export default function Home() {
     return <div>Loading...</div>;
   }
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col max-h-screen">
       <div className="flex justify-center items-center">
         <NavBar userName={userNameValue} />
       </div>
-      <div className="flex-grow grid grid-cols-1 md:grid-cols-3 py-2  md:px-8 lg:px-16 xl:px-32 2xl:px-40">
+      <div className="flex-grow grid grid-cols-1 md:grid-cols-3   md:px-8 lg:px-16 xl:px-32 2xl:px-40">
         <div className="col-span-2 p-2 hidden md:inline-block">
           <div className="h-full w-full border shadow-md rounded-[30px] bg-white ">
             <ImageComponent />
@@ -81,7 +106,7 @@ export default function Home() {
         <div className="col-span-1 p-2  ">
           <div className="h-full w-full md:border md:shadow-md rounded-[30px] bg-transparent md:bg-white flex flex-col justify-evenly gap-6  items-center p-6">
             <WelcomeCard />
-            <Sidebar userId={userData?.id || 0} />
+            <Sidebar userId={userData?.id } />
           </div>
         </div>
       </div>

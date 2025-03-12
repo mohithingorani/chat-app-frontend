@@ -1,10 +1,15 @@
-// atoms.js
 import { atom } from "recoil";
 
 export const userNameAtom = atom({
   key: 'userName', // Unique key
   default: "",
 });
+
+export const isOnlineAtom = atom({
+  key: 'isOnline', // Unique key
+  default: false,
+});
+
 
 export const userDataAtom = atom({
   key: 'userData', // Updated to a unique key

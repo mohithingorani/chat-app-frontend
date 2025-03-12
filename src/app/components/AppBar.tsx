@@ -10,7 +10,6 @@ import axios from "axios";
 import AddFriendCard from "./AddFriends";
 import RecivedRequestsCard from "./RecievedRequests";
 import { useRecoilState } from "recoil";
-import { userNameAtom } from "../atoms";
 
 export default function NavBar({ userName }: { userName: string }) {
   const [users, setUsers] = useState([]);
@@ -18,7 +17,6 @@ export default function NavBar({ userName }: { userName: string }) {
   const [showRequests, setShowRequests] = useState<boolean>(false);
   const [searchFriend, setSearchFriend] = useState<string>("");
   const [recienvedRequests, setRecievedRequests] = useState([]);
-  const [userNameValue, setUserNameValue] = useRecoilState(userNameAtom);
   const [debouncedSearch, setDebouncedSearch] = useState<string>("");
 
   const session = useSession();
@@ -192,7 +190,10 @@ export default function NavBar({ userName }: { userName: string }) {
           />
         </div>
 
-        <Link className="hover:text-orange-600 hidden md:inline-block" href="/">
+        <Link onMouseOver={()=>{
+          setShowAddFriend(false);
+          setShowRequests(false);
+        }} className="hover:text-orange-600 hidden md:inline-block" href="/">
           Posts
         </Link>
         {session.status === "unauthenticated" ? (

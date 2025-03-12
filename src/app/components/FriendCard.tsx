@@ -2,13 +2,23 @@
 
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { userDataAtom, userNameAtom } from "../atoms";
+import { userDataAtom } from "../atoms";
 import { useRecoilState } from "recoil";
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 
-export default function FriendCard({ friend }: { friend: any }) {
-  const router = useRouter();
+interface Friend{
+  username: string,
+  picture: string,
+  id: number,
+  name: string,
+  onlineStatus:boolean,
+  lastActive ?: string,
+  unreadMessages ?: string
+}
+
+export default function FriendCard({ friend }: { friend: Friend }) {
+  const router = useRouter(); 
   const [userDataValue] = useRecoilState(userDataAtom);
   const [hidden, setHidden] = useState(true);
   const cardRef = useRef<HTMLButtonElement>(null); // Ref to track the component
@@ -100,20 +110,20 @@ export default function FriendCard({ friend }: { friend: any }) {
             <div className="flex items-center">
               <div
                 className={`w-2 h-2 rounded-full ${
-                  friend.isOnline ? "bg-green-500" : "bg-gray-400"
+                  friend.onlineStatus ? "bg-green-500" : "bg-gray-400"
                 }`}
               ></div>
               <div className="text-xs ml-1">
-                {friend.isOnline ? "Online" : "Offline"}
+                {friend.onlineStatus ? "Online" : "Offline"}
               </div>
             </div>
 
             {/* Unread Messages */}
-            {friend.unreadMessages > 0 && (
+            {/* {friend.unreadMessages > 0 && (
               <div className="ml-auto w-5 h-5 flex justify-center items-center bg-orange-500 text-white text-xs rounded-full">
                 {friend.unreadMessages}
               </div>
-            )}
+            )} */}
           </div>
         </div>
       </div>
