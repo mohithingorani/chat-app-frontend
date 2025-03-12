@@ -213,14 +213,14 @@ export default function NavBar({ userName }: { userName: string }) {
           </Link>
         ) : null}
       </div>
-      <div className=" bg-white md:flex hidden justify-start items-center gap-2 px-6 py-2 rounded-full border shadow-sm ">
+      {/* <div className=" bg-white md:flex hidden justify-start items-center gap-2 px-6 py-2 rounded-full border shadow-sm ">
         <Image src="magnifying-glass.svg" width={24} height={24} alt="search" />
         <input
           type="text"
           className=" px-4 py-2 bg-transparent focus:outline-none"
           placeholder="Search here"
         />
-      </div>
+      </div> */}
       {session.data ? (
         <div className="overflow-hidden rounded-full group ">
           <Image
